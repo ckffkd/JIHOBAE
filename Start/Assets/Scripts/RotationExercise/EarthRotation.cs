@@ -11,7 +11,7 @@ public class EarthRotation : MonoBehaviour
     {
         SunObject = GameObject.Find("Sun");
     }
-    // Start is called before the first frame update
+   
     void Start()
     {
         this.transform.parent = SunObject.transform;
