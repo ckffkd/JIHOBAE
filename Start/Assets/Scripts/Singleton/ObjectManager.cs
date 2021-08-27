@@ -64,13 +64,6 @@ public class ObjectManager //: MonoBehaviour
         //** 사실상 업서도 되는 코드
         _Object.GetComponent<BoxCollider>().isTrigger = true;
 
-        //**난수 함수  = Random.Range(Min, Max)
-        //Random.Range(-25, 25)
-        _Object.transform.position = new Vector3(
-            Random.Range(-25, 25),
-            0.0f,
-            Random.Range(-25, 25));
-
         //** 생성된 오브젝트를 비활성화 설정.
         _Object.SetActive(false);
         
@@ -80,6 +73,7 @@ public class ObjectManager //: MonoBehaviour
         DisableList.Push(_Object);
         
     }   
+     
 
 }
 

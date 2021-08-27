@@ -19,6 +19,7 @@ public class MoveControl : MonoBehaviour
     //** Enemy 오브젝트 프리팹을 추가.
     public GameObject EnemyPrefab;
 
+    
     void Awake()
     {
         //** 현재 오브젝트의 물리엔진 컴퍼넌트를 받아옴
@@ -33,6 +34,7 @@ public class MoveControl : MonoBehaviour
         //** Resources 폴더 안에 있는 리소스를 불러옴.
         //** Resources.Load("경로") as GameObject; <=의 형태.
         EnemyPrefab = Resources.Load("Prefabs/Enemy") as GameObject;
+         
 
     }
 
@@ -48,7 +50,7 @@ public class MoveControl : MonoBehaviour
         Step = new Vector3(0.0f, 0.0f, 0.0f);
 
         //** 이동속도
-        Speed = 0.5f;
+        Speed = 0.4f;
 
         //** Move = 이동상태 : 시작할때 정지상태로 만듬.
         Move = false;
@@ -69,9 +71,9 @@ public class MoveControl : MonoBehaviour
 
             ObjectManager.GetInstance.AddObject(
                Instantiate(EnemyPrefab));
-             
-        }
-         
+
+           
+        } 
     }
 
     private void Update()
@@ -79,6 +81,16 @@ public class MoveControl : MonoBehaviour
         // ** 스페이스 키 입력을 받았을때
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            if(ObjectManager.GetInstance.GetDisableList.Count == 0 )
+            {
+                for (int i = 0; i < 5; ++i)
+                   ObjectManager.GetInstance.AddObject(
+                       Instantiate(EnemyPrefab));
+                 
+            }
+
+
+
             //** GetDisableList에 있는 객체 하나를 버리고 
             GameObject Obj = ObjectManager.GetInstance.GetDisableList.Pop();
 
@@ -86,7 +98,8 @@ public class MoveControl : MonoBehaviour
             Obj.SetActive(true);
 
             //** 변경 후 parent를 EnableList하위에 포함시키고
-            Obj.transform.parent = GameObject.Find("EnableList").transform;
+            //Obj.transform.parent = GameObject.Find("EnableList").transform;
+            //EnemyController -> void OnEnable로 이미 실행하니까 지워두 됨
 
             //** 활성화된 오브젝트를 관리하는 리스트에 포함시킴.
             ObjectManager.GetInstance.GetEnableList.Add(Obj); 
@@ -112,8 +125,7 @@ public class MoveControl : MonoBehaviour
         if (Move == true)
             //** Step = 방향, Speed = 속도
             //** Step 방향으로 Speed만큼 이동시킴.
-            this.transform.position += Step * Speed;
-         
+            this.transform.position += Step * Speed; 
     }
 
 
@@ -157,6 +169,22 @@ public class MoveControl : MonoBehaviour
         //** 충돌된 객체의 이름이 TargetPoint가 아니면 무시하고,
         //** TargetPoint일때 멈춤.
         if(other.name == "TargetPoint")
-        Move = false; 
+        Move = false;
+
+        if(other.tag == "Enemy")
+         {
+             //** EnableList에 있던 객체를 DisnableList로 변경     
+             other.transform.parent = GameObject.Find("DisableList").transform;
+             
+             //** 객체를 DisableList로 이동
+             ObjectManager.GetInstance.GetDisableList.Push(other.gameObject);
+
+             //** EnableList에 있던 객체 참조를 삭제
+             ObjectManager.GetInstance.GetEnableList.Remove(other.gameObject);
+
+             //** 이동이 완료되면 객체를 비활성화한다.
+             other.gameObject.SetActive(false);
+         }
+        
     }
 }
