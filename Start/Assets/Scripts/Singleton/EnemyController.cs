@@ -108,11 +108,11 @@ public class EnemyController : MonoBehaviour
             Obj.gameObject.AddComponent<FistController>();
               
             //** 총알이 한번만 발사 되도록 설정.
-            FistallCheck = false; 
+            FistallCheck = false;
 
-            Obj.gameObject.transform.position = this.transform.position;
+            Obj.transform.position = this.transform.position;
 
-            Obj.gameObject.transform.LookAt(WayPoint.transform.position);
+            Obj.transform.rotation = this.transform.rotation;
 
             //** Coroutine 실행.
             StartCoroutine("Fistall"); 
