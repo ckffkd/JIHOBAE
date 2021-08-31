@@ -110,9 +110,10 @@ public class EnemyController : MonoBehaviour
             //** 총알이 한번만 발사 되도록 설정.
             FistallCheck = false;
 
-            Obj.transform.position = this.transform.position;
+            Obj.transform.position = transform.position;
 
-            Obj.transform.rotation = this.transform.rotation;
+            Obj.transform.rotation = transform.rotation;
+            //Obj.transform.LookAt(WayPoint.transform.position);
 
             //** Coroutine 실행.
             StartCoroutine("Fistall"); 
